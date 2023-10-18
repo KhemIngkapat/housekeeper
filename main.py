@@ -65,14 +65,13 @@ def go_to_target(target2: number, target_width: number, servo_pos: number):
         else:
             new_servo_pos = serv_pos + (y_center - 140) * 0.16
             if y_center < 0:
-                servo_pos2 = 0
-                new_servo_pos = servo_pos2
+                new_servo_pos = servo_pos
             print(new_servo_pos)
             look(serv_pos, new_servo_pos)
         serv_pos = new_servo_pos
         width = huskylens.readeBox_index(target2, 1, Content1.WIDTH)
         basic.pause(500)
-        iBIT.motor(ibitMotor.FORWARD, 20)
+        iBIT.motor(ibitMotor.FORWARD, 30)
         basic.pause((target_width - width) * 20)
         iBIT.motor_stop()
         width = huskylens.readeBox_index(target2, 1, Content1.WIDTH)
@@ -165,10 +164,10 @@ iBIT.servo(ibitServo.SV2, 0)
 
 def on_forever():
     global index
-    huskylens.init_i2c()
-    huskylens.init_mode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
     look(0, 47)
     while index < 7:
+        huskylens.init_i2c()
+        huskylens.init_mode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
         cmp = locate_target(1)
         if cmp:
             basic.show_icon(IconNames.HEART)
@@ -190,7 +189,7 @@ def on_forever():
             basic.show_icon(IconNames.HEART)
             center_target(1)
             basic.show_icon(IconNames.SMALL_HEART)
-            go_to_target(1, 135, 10)
+            go_to_target(1, 150, 10)
             basic.show_icon(IconNames.TSHIRT)
             release()
             basic.pause(1000)
@@ -199,6 +198,8 @@ def on_forever():
     index = 0
     basic.show_icon(IconNames.EIGHTH_NOTE)
     while index < 7:
+        huskylens.init_i2c()
+        huskylens.init_mode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
         cmp = locate_target(2)
         if cmp:
             basic.show_icon(IconNames.HEART)
@@ -220,7 +221,7 @@ def on_forever():
             basic.show_icon(IconNames.HEART)
             center_target(2)
             basic.show_icon(IconNames.SMALL_HEART)
-            go_to_target(2, 135, 10)
+            go_to_target(2, 150, 10)
             basic.show_icon(IconNames.TSHIRT)
             release()
             basic.pause(1000)

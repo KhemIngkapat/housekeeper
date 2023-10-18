@@ -1,19 +1,16 @@
-function look(cur_pos: number, pos: number) {
+function look (cur_pos: number, pos: number) {
     let step: number;
-    if (cur_pos < pos) {
+if (cur_pos < pos) {
         step = 1
     } else {
         step = -1
     }
-    
     for (let i of _py.range(cur_pos, pos, step)) {
         iBIT.Servo(ibitServo.SV1, i)
         basic.pause(50)
     }
 }
-
-function locate_target(target: number): number {
-    
+function locate_target (target: number) {
     basic.showNumber(1)
     iBIT.Spin(ibitSpin.Right, 40)
     basic.pause(500)
@@ -24,14 +21,13 @@ function locate_target(target: number): number {
     is_round2 = 0
     is_left = 1
     completed = 1
-    while (!result) {
+    while (!(result)) {
         if (completed >= 288) {
             basic.showIcon(IconNames.No)
             basic.pause(1000)
             completed = 0
-            break
+            break;
         }
-        
         if (is_round2 == 12) {
             iBIT.Motor(ibitMotor.Forward, 50)
             basic.pause(750)
@@ -39,7 +35,6 @@ function locate_target(target: number): number {
             is_round2 = 0
             is_left = randint(0, 1)
         }
-        
         if (is_left == 1) {
             iBIT.Spin(ibitSpin.Left, 70)
             basic.pause(80)
@@ -49,7 +44,6 @@ function locate_target(target: number): number {
             basic.pause(80)
             iBIT.MotorStop()
         }
-        
         huskylens.request()
         result = huskylens.isAppear(target, HUSKYLENSResultType_t.HUSKYLENSResultBlock)
         is_round2 += 1
@@ -59,12 +53,9 @@ function locate_target(target: number): number {
     is_round2 = 0
     return completed
 }
-
-function go_to_target(target2: number, target_width: number, servo_pos: number) {
+function go_to_target (target2: number, target_width: number, servo_pos: number) {
     let new_servo_pos: number;
-    let servo_pos2: number;
-    
-    huskylens.request()
+huskylens.request()
     width = huskylens.readeBox_index(target2, 1, Content1.width)
     y_center = huskylens.readeBox_index(target2, 1, Content1.yCenter)
     serv_pos = servo_pos
@@ -73,31 +64,26 @@ function go_to_target(target2: number, target_width: number, servo_pos: number) 
         basic.pause(200)
         iBIT.MotorStop()
     }
-    
     while (width < target_width) {
         basic.showIcon(IconNames.Happy)
         if (Math.abs(width - target_width) <= target_width * 0.1) {
-            break
+            break;
         }
-        
         y_center = huskylens.readeBox_index(target2, 1, Content1.yCenter)
         if (y_center >= 120 && y_center <= 160) {
-            
+        	
         } else {
             new_servo_pos = serv_pos + (y_center - 140) * 0.16
             if (y_center < 0) {
-                servo_pos2 = 0
-                new_servo_pos = servo_pos2
+                new_servo_pos = servo_pos
             }
-            
             console.log(new_servo_pos)
-            look(serv_pos, new_servo_pos)
+look(serv_pos, new_servo_pos)
         }
-        
         serv_pos = new_servo_pos
         width = huskylens.readeBox_index(target2, 1, Content1.width)
         basic.pause(500)
-        iBIT.Motor(ibitMotor.Forward, 20)
+        iBIT.Motor(ibitMotor.Forward, 30)
         basic.pause((target_width - width) * 20)
         iBIT.MotorStop()
         width = huskylens.readeBox_index(target2, 1, Content1.width)
@@ -106,29 +92,25 @@ function go_to_target(target2: number, target_width: number, servo_pos: number) 
     width = -1
     y_center = -1
 }
-
-function release() {
+function release () {
     iBIT.Servo(ibitServo.SV2, 60)
     iBIT.Motor(ibitMotor.Backward, 50)
     basic.pause(2000)
     iBIT.Servo(ibitServo.SV2, 0)
     iBIT.MotorStop()
 }
-
-function center_target(target3: number) {
-    
+function center_target (target3: number) {
     huskylens.request()
     x_center = huskylens.readeBox_index(target3, 1, Content1.xCenter)
     pause_time = Math.abs(x_center - 150) * 4
     is_round = 0
     while (!(x_center >= 130 && x_center <= 170)) {
-        if (is_round >= 96 && !x_center) {
+        if (is_round >= 96 && !(x_center)) {
             iBIT.Motor(ibitMotor.Backward, 50)
             basic.pause(500)
             iBIT.MotorStop()
             is_round = 0
         }
-        
         if (x_center < 130 && x_center > 0) {
             iBIT.Spin(ibitSpin.Right, 25)
             basic.pause(pause_time)
@@ -143,11 +125,9 @@ function center_target(target3: number) {
             } else {
                 iBIT.Spin(ibitSpin.Left, 25)
             }
-            
             basic.pause(100)
             iBIT.MotorStop()
         }
-        
         huskylens.request()
         x_center = huskylens.readeBox_index(target3, 1, Content1.xCenter)
         pause_time = Math.abs(x_center - 150) * 4
@@ -155,8 +135,7 @@ function center_target(target3: number) {
     }
     x_center = -1
 }
-
-function pick_up(target4: number) {
+function pick_up (target4: number) {
     huskylens.request()
     if (huskylens.isAppear(target4, HUSKYLENSResultType_t.HUSKYLENSResultBlock)) {
         iBIT.Servo(ibitServo.SV2, 60)
@@ -165,12 +144,10 @@ function pick_up(target4: number) {
         iBIT.MotorStop()
         iBIT.Servo(ibitServo.SV2, 0)
     }
-    
     iBIT.Motor(ibitMotor.Backward, 25)
     basic.pause(1500)
     iBIT.MotorStop()
 }
-
 let index = 0
 let is_round = 0
 let pause_time = 0
@@ -182,36 +159,35 @@ let completed = 0
 let is_left = 0
 let is_round2 = 0
 let result = false
-let servo_pos28 = 0
-let servo_pos26 = 0
-let servo_pos24 = 0
-let pause_time22 = 0
-let x_center22 = 0
-let servo_pos22 = 0
-let y_center22 = 0
-let width22 = 0
-let result22 = false
-let new_servo_pos2 = 0
-let result2 = false
-let width2 = 0
-let y_center2 = 0
-let servo_pos23 = 0
-let x_center2 = 0
-let pause_time2 = 0
-let servo_pos25 = 0
-let servo_pos27 = 0
 let servo_pos29 = 0
+let servo_pos27 = 0
+let servo_pos25 = 0
+let pause_time2 = 0
+let x_center2 = 0
+let servo_pos23 = 0
+let y_center2 = 0
+let width2 = 0
+let result2 = false
+let new_servo_pos2 = 0
+let result22 = false
+let width22 = 0
+let y_center22 = 0
+let servo_pos22 = 0
+let x_center22 = 0
+let pause_time22 = 0
+let servo_pos24 = 0
+let servo_pos26 = 0
+let servo_pos28 = 0
 huskylens.initI2c()
 huskylens.initMode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
 iBIT.Servo(ibitServo.SV1, 0)
 iBIT.Servo(ibitServo.SV2, 0)
-basic.forever(function on_forever() {
+basic.forever(function () {
     let cmp: number;
-    
-    huskylens.initI2c()
-    huskylens.initMode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
-    look(0, 47)
+look(0, 47)
     while (index < 7) {
+        huskylens.initI2c()
+        huskylens.initMode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
         cmp = locate_target(1)
         if (cmp) {
             basic.showIcon(IconNames.Heart)
@@ -225,7 +201,6 @@ basic.forever(function on_forever() {
         } else {
             index += 0 - 1
         }
-        
         if (index == 1 || index == 3 || index == 5 || index == 6) {
             basic.showIcon(IconNames.House)
             look(47, 10)
@@ -235,18 +210,19 @@ basic.forever(function on_forever() {
             basic.showIcon(IconNames.Heart)
             center_target(1)
             basic.showIcon(IconNames.SmallHeart)
-            go_to_target(1, 135, 10)
+            go_to_target(1, 150, 10)
             basic.showIcon(IconNames.TShirt)
             release()
             basic.pause(1000)
         }
-        
         index += 1
     }
     look(0, 47)
     index = 0
     basic.showIcon(IconNames.EighthNote)
     while (index < 7) {
+        huskylens.initI2c()
+        huskylens.initMode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
         cmp = locate_target(2)
         if (cmp) {
             basic.showIcon(IconNames.Heart)
@@ -260,7 +236,6 @@ basic.forever(function on_forever() {
         } else {
             index += 0 - 1
         }
-        
         if (index == 1 || index == 3 || index == 5 || index == 6) {
             basic.showIcon(IconNames.House)
             look(47, 10)
@@ -270,12 +245,11 @@ basic.forever(function on_forever() {
             basic.showIcon(IconNames.Heart)
             center_target(2)
             basic.showIcon(IconNames.SmallHeart)
-            go_to_target(2, 135, 10)
+            go_to_target(2, 150, 10)
             basic.showIcon(IconNames.TShirt)
             release()
             basic.pause(1000)
         }
-        
         index += 1
     }
 })
