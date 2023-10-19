@@ -99,9 +99,12 @@ function release () {
     basic.pause(500)
     iBIT.MotorStop()
     iBIT.Servo(ibitServo.SV2, 0)
-    iBIT.Spin(ibitSpin.Left, 50)
     basic.pause(500)
     iBIT.MotorStop()
+    iBIT.Motor(ibitMotor.Backward, 100)
+    basic.pause(500)
+    iBIT.MotorStop()
+    iBIT.Spin(ibitSpin.Left, 50)
 }
 function center_target (target3: number) {
     huskylens.request()
@@ -190,6 +193,7 @@ basic.forever(function () {
     let cmp: number;
 look(0, 47)
     while (index < 7) {
+        look(47, 47)
         huskylens.initI2c()
         huskylens.initMode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
         cmp = locate_target(1)
@@ -202,8 +206,6 @@ look(0, 47)
             pick_up(1)
             basic.pause(1000)
             look(0, 47)
-        } else {
-            index += 0 - 1
         }
         if (index == 1 || index == 3 || index == 5 || index == 6) {
             basic.showIcon(IconNames.House)
@@ -223,6 +225,7 @@ look(0, 47)
     index = 0
     basic.showIcon(IconNames.EighthNote)
     while (index < 7) {
+        look(47, 47)
         huskylens.initI2c()
         huskylens.initMode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
         cmp = locate_target(2)
@@ -235,8 +238,6 @@ look(0, 47)
             pick_up(2)
             basic.pause(1000)
             look(0, 47)
-        } else {
-            index += 0 - 1
         }
         if (index == 1 || index == 3 || index == 5 || index == 6) {
             basic.showIcon(IconNames.House)
