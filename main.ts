@@ -94,9 +94,13 @@ look(serv_pos, new_servo_pos)
 }
 function release () {
     iBIT.Servo(ibitServo.SV2, 60)
-    iBIT.Motor(ibitMotor.Backward, 50)
-    basic.pause(2000)
+    basic.pause(500)
+    iBIT.Motor(ibitMotor.Forward, 100)
+    basic.pause(500)
+    iBIT.MotorStop()
     iBIT.Servo(ibitServo.SV2, 0)
+    iBIT.Spin(ibitSpin.Left, 50)
+    basic.pause(500)
     iBIT.MotorStop()
 }
 function center_target (target3: number) {
@@ -210,8 +214,6 @@ look(0, 47)
             basic.showIcon(IconNames.Heart)
             center_target(1)
             basic.showIcon(IconNames.SmallHeart)
-            go_to_target(1, 150, 10)
-            basic.showIcon(IconNames.TShirt)
             release()
             basic.pause(1000)
         }
